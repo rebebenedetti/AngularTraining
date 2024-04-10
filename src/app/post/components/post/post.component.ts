@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 export class PostComponent {
   buttonText: string = "VIEW MORE";
   showFullContent: boolean = false;
+  contentClasses: string = 'line-clamp-2';
   constructor(){}
 
   @Input()
@@ -25,5 +26,6 @@ export class PostComponent {
   ViewMoreOrLessContent() {
     this.showFullContent = !this.showFullContent;
     this.buttonText = this.showFullContent ? 'VIEW LESS' : 'VIEW MORE';
+    this.contentClasses = this.showFullContent ? '' : 'line-clamp-2';
   }
 }

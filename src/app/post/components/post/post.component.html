@@ -1,11 +1,8 @@
-<div class="p-8 border border-solid border-gray-400 mb-5 rounded-md">
-  <h3>{{ post.user }}</h3>
-  <p>{{ post.published | date : "MM/dd/yyyy" }}</p>
-  <div *ngIf="showFullContent; else shortContent">
-    <p>{{ post.content }}</p>
+<div class="p-6 border border-solid border-gray-400 ml-6 mr-6 mt-2 mb-2 rounded-lg max-w-xl">
+  <h3 class="font-bold text-xl" >{{ post.user }}</h3>
+  <p class="mb-3 text-base text-gray-600">{{ post.published | date : "MM/dd/yyyy" }}</p>
+  <div [class]="contentClasses">
+    <p class="">{{ post.content }}</p>
   </div>
-  <ng-template #shortContent>
-    <p>{{ post.content | slice : 0 : 150 }}...</p>
-  </ng-template>
-  <button (click)="ViewMoreOrLessContent()" [ngClass]="showFullContent ? 'show-less-button' : 'show-more-button'">{{ buttonText }}</button>
+  <button class="text-blue-500 mt-2" (click)="ViewMoreOrLessContent()">{{ buttonText }}</button>
 </div>
