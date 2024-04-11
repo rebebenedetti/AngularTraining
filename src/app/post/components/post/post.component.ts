@@ -9,19 +9,19 @@ import { CommonModule } from '@angular/common';
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss'
 })
+
+//DumpComponent
 export class PostComponent {
   buttonText: string = "VIEW MORE";
   showFullContent: boolean = false;
   contentClasses: string = 'line-clamp-2';
-  constructor(){}
+  constructor() { }
 
   @Input()
   post!: Post;
 
-
   ngOnInit() {
   }
-
 
   ViewMoreOrLessContent() {
     this.showFullContent = !this.showFullContent;
