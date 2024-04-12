@@ -1,0 +1,30 @@
+<form
+  class="mt-3 flex justify-center"
+  [formGroup]="postForm"
+  (ngSubmit)="submit()"
+>
+  <div class="max-w-lg">
+    <h2>Create a post</h2>
+    <mat-form-field class="w-full mb-4">
+      <mat-label>User</mat-label>
+      <input matInput formControlName="user" />
+      <mat-hint>
+        <span *ngFor="let error of userErrors$ | async">
+          {{ error }}
+        </span>
+      </mat-hint>
+    </mat-form-field>
+    <mat-form-field class="w-full mb-4">
+      <mat-label>Content</mat-label>
+      <textarea matInput formControlName="content"></textarea>
+      <mat-hint>
+        <span *ngFor="let error of contentErrors$ | async">
+          {{ error }}
+        </span>
+      </mat-hint>
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled]="postForm.invalid">
+      Create post
+    </button>
+  </div>
+</form>
