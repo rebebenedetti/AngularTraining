@@ -1,8 +1,13 @@
-<h1 class="text-3xl font-bold mt-8 mb-8 text-center">Posts List</h1>
-<div class="flex justify-center">
-  <div class="grid gap-4 grid-cols-1">
-    <ng-container *ngFor="let post of posts">
-      <app-post [post]="post"></app-post>
-    </ng-container>
+<div class="bg-indigo-100">
+  <h1 class="text-3xl text-center">Posts List</h1>
+  <div class="flex justify-center">
+    <div class="grid gap-4 grid-cols-1">
+      <ng-container *ngFor="let post of posts">
+        <app-post [post]="post"></app-post>
+      </ng-container>
+      <button mat-raised-button color="primary" (click)="AddPost()">
+        Add a new post
+      </button>
+    </div>
   </div>
 </div>
