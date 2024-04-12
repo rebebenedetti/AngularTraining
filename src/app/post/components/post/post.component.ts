@@ -9,7 +9,6 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.scss',
 })
 
 //DumpComponent
