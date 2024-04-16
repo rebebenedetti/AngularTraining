@@ -12,7 +12,8 @@ import { filter, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Post } from '../../models/post';
-import { PostsService } from '../../posts.service';
+import { Store } from '@ngrx/store';
+import { createPostRequest } from '../../state/posts.actions';
 
 @Component({
   selector: 'app-post-form',
@@ -57,7 +58,7 @@ export class PostFormComponent {
         errors.push('The content is required');
       }
       if (abstractControl.getError('minlength')) {
-        errors.push('The post min legth is 50');
+        errors.push('The post min length is 50');
       }
       return errors;
     })
@@ -65,8 +66,8 @@ export class PostFormComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private postsService: PostsService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 
   submit() {
@@ -77,7 +78,7 @@ export class PostFormComponent {
       published: new Date(),
       content: content ?? '',
     };
-    this.postsService.addPost(postData);
-    this.router.navigate(['posts/list']);
+    this.store.dispatch(createPostRequest({ post: postData }));
+    this.router.navigate(['posts', 'list']);
   }
 }

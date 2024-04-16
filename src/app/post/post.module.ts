@@ -4,10 +4,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { PostsService } from './posts.service';
 import { POST_SERVICE_URL } from './injection-token/post-service-url';
 import { RouterModule, Routes } from '@angular/router';
+import { provideState } from '@ngrx/store';
+import { POSTS_STATE_KEY, postsReducer } from './state/posts.reducer';
+import { provideEffects } from '@ngrx/effects';
+import { PostsEffects } from './state/posts.effects';
 
 export const routes: Routes = [
   {
     path: 'list',
+    providers: [
+      provideState({ name: POSTS_STATE_KEY, reducer: postsReducer }),
+      provideEffects([PostsEffects]),
+    ],
     loadComponent: () =>
       import('./components/post-list/post-list.component').then(
         (x) => x.PostListComponent

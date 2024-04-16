@@ -1,9 +1,12 @@
 <mat-card class="max-w-xl">
-  <mat-card-header>
+  <mat-card-header class="flex justify-between items-center">
     <mat-card-title
       ><mat-icon color="primary">account_circle</mat-icon>
       {{ post.user }}</mat-card-title
     >
+    <button mat-button color="primary" (click)="openEditPostDialog()">
+      <mat-icon>edit</mat-icon>
+    </button>
     <mat-card-subtitle>{{
       post.published | date : "MM/dd/yyyy"
     }}</mat-card-subtitle>
@@ -17,8 +20,11 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button color="primary" (click)="ViewMoreOrLessContent()">
+    <button mat-button color="primary" (click)="viewMoreOrLessContent()">
       {{ buttonText }}
+    </button>
+    <button mat-button color="warn" (click)="deletePost()">
+      <mat-icon>delete</mat-icon>
     </button>
   </mat-card-actions>
 </mat-card>

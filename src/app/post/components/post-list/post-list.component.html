@@ -1,11 +1,18 @@
-<div class="bg-indigo-100">
-  <h1 class="text-3xl text-center">Posts List</h1>
-  <div class="flex justify-center">
+<div class="bg-indigo-100 pt-5 min-h-screen">
+  <p class="text-3xl text-center font-semibold;">Posts List</p>
+  <p class="text-center italic">List length: {{ postsCount$ | async }}</p>
+  <div
+    *ngIf="(postsLoaded$ | async) === false"
+    class="flex justify-center items-center h-screen"
+  >
+    <mat-spinner diameter="60"></mat-spinner>
+  </div>
+  <div *ngIf="(postsLoaded$ | async) === true" class="flex justify-center">
     <div class="grid gap-4 grid-cols-1">
-      <ng-container *ngFor="let post of posts">
+      <ng-container *ngFor="let post of posts$ | async">
         <app-post [post]="post"></app-post>
       </ng-container>
-      <button mat-raised-button color="primary" (click)="AddPost()">
+      <button mat-raised-button color="primary" (click)="addPost()">
         Add a new post
       </button>
     </div>
