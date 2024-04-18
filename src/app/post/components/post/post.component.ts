@@ -1,31 +1,35 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Post } from '../../models/post';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Store } from '@ngrx/store';
-import {
-  deletePostRequest,
-  updatePostRequest,
-} from '../../state/posts.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditPostComponent } from '../dialog-edit-post/dialog-edit-post.component';
+import { PostComponentStore } from './post.component.store';
 
 @Component({
   selector: 'app-post',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
+  providers: [PostComponentStore],
   templateUrl: './post.component.html',
 })
 
-//DumpComponent
-export class PostComponent {
+//DumbComponent
+export class PostComponent implements OnInit {
   buttonText: string = 'VIEW MORE';
   showFullContent: boolean = false;
   contentClasses: string = 'line-clamp-2';
 
-  constructor(private store: Store, public dialog: MatDialog) {}
+  constructor(
+    public dialog: MatDialog,
+    private postComponentStore: PostComponentStore
+  ) {}
+
+  ngOnInit(): void {
+    this.postComponentStore.setPost(this.post);
+  }
 
   @Input()
   post!: Post;
@@ -37,7 +41,7 @@ export class PostComponent {
   }
 
   deletePost() {
-    this.store.dispatch(deletePostRequest({ post: this.post }));
+    this.postComponentStore.deletePost();
   }
 
   openEditPostDialog(): void {
@@ -48,7 +52,8 @@ export class PostComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.store.dispatch(updatePostRequest({ post: result }));
+      this.postComponentStore.setPost(result);
+      this.postComponentStore.editPost();
     });
   }
 }

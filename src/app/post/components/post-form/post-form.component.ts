@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,12 +8,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { filter, map } from 'rxjs';
+import { Subject, filter, map } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Post } from '../../models/post';
-import { Store } from '@ngrx/store';
-import { createPostRequest } from '../../state/posts.actions';
+import { PostFormComponentStore } from './post-form.component.store';
 
 @Component({
   selector: 'app-post-form',
@@ -26,9 +25,10 @@ import { createPostRequest } from '../../state/posts.actions';
     MatInputModule,
     RouterLink,
   ],
+  providers: [PostFormComponentStore],
   templateUrl: './post-form.component.html',
 })
-export class PostFormComponent {
+export class PostFormComponent implements OnDestroy {
   public postForm = this.formBuilder.group({
     user: this.formBuilder.control('', [Validators.required]),
     content: this.formBuilder.control('', [
@@ -64,21 +64,33 @@ export class PostFormComponent {
     })
   );
 
+  public onDestroy$ = new Subject<void>();
+
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private store: Store
-  ) {}
+    private postFormComponentStore: PostFormComponentStore
+  ) {
+    this.postForm.valueChanges
+      .pipe(
+        map((value) => {
+          const post: Partial<Post> = {
+            user: value.user ?? '',
+            content: value.content ?? '',
+          };
+          this.postFormComponentStore.updatePost(post);
+        })
+      )
+      .subscribe();
+  }
 
   submit() {
-    const user = this.postForm.value.user;
-    const content = this.postForm.value.content;
-    const postData: Post = {
-      user: user ?? '',
-      published: new Date(),
-      content: content ?? '',
-    };
-    this.store.dispatch(createPostRequest({ post: postData }));
+    this.postFormComponentStore.createPost();
     this.router.navigate(['posts', 'list']);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.unsubscribe();
   }
 }

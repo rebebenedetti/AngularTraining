@@ -1,12 +1,11 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { Post } from '../models/post';
+import { requestAllThePosts, loadPostsSuccess } from './posts.actions';
 import {
-  requestAllThePosts,
-  loadPostsSuccess,
-  createPostRequest,
   deletePostRequest,
   updatePostRequest,
-} from './posts.actions';
+} from '../components/post/post.component.store';
+import { createPostRequest } from '../components/post-form/post-form.component.store';
 
 export const POSTS_STATE_KEY = 'posts';
 
@@ -34,7 +33,8 @@ export const postsReducer = createReducer(
   }),
   on(createPostRequest, (state, action) => {
     const newPosts: Post[] = state.posts.slice();
-    newPosts.push(action.post);
+    const newPost: Post = { ...action.post, published: new Date() };
+    newPosts.push(newPost);
     return {
       ...state,
       posts: newPosts,
